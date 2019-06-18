@@ -1,0 +1,274 @@
+﻿@model AdministracionRH.Models.CatalogosModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container">
+    <h2>@ViewBag.Description</h2>
+    <p style="font-size:12px">
+        <span class="glyphicon glyphicon-plus"></span>
+        <a data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">Nuevo</a>
+    </p>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabelTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        @Html.Hidden("Origen")
+                        @Html.Hidden("EnumCatalogo")
+                        @Html.Hidden("ID")
+                        <div class="form-group">
+                            <span><b>Descripción</b></span>
+                            <input type="text" class="form-control" id="DESCRIPCION" placeholder="Ingresar descripción" style="width:400px;" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAdd" onclick="return Create();">Guardar</button>
+                    <button type="button" class="btn btn-primary btn-sm " id="btnUpdate" style="display:none;" onclick="Update();">Guardar cambios</button>
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="confirmMessage">
+                    <h4 class="modaldelete-title"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmOk" onclick="OkDelete();">Sí</button>
+                    <button type="button" class="btn btn-default btn-sm" id="confirmCancel" onclick="Cerrar();">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="AlertModalMessage">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="confirmMessage">
+                    <h4 class="modaldelete-title_alert"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" id="confirmOk" onclick="OkAlertMessage();">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.lstCatalogos != null)
+    {
+        if (Model.lstCatalogos.Count() > 0)
+        {
+            <table class="table table-bordered table-condensed table-striped" style="width:auto;font-size:13px">
+                <tr>
+                    <th>
+                        @ViewBag.Description
+                    </th>
+                    <th>Editar | Borrar</th>
+                </tr>
+                @foreach (var item in Model.lstCatalogos)
+                {
+                    <tr>
+                        <td>
+                            @item.DESCRIPTION
+                        </td>
+                        <td style="text-align:center">
+                            <a href="javascript:funEditar(@item.ID)" class="glyphicon glyphicon-edit"></a>
+                            <a onClick="funEliminar(@item.ID, '@item.DESCRIPTION')" class="glyphicon glyphicon-trash"></a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    }
+
+</div>
+
+<script type="text/javascript">
+
+    function Cerrar() {
+        $('#confirmModal').modal('hide');
+    }
+    
+
+    function OkDelete() {
+     
+        var parameter = {
+            Id: $('#ID').val(),
+            enumeracion: $('#EnumCatalogo').val()
+        };
+        $('#confirmModal').modal('hide')
+        $.ajax({
+            url: "/Catalogos/Delete/",
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            data: JSON.stringify(parameter),
+            success: function (result) {
+                $('#ID').val("");
+                $('#DESCRIPCION').val("");
+                $('#Origen').val("");
+                $('#confirmModal').modal('hide');
+                $('#btnUpdate').hide();
+            },
+            success: function (result) {
+                procesaResultado(result);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+
+    function clearTextBox() {
+        $('#DESCRIPCION').val("");
+        $('#btnUpdate').hide();
+        $('#btnAdd').show();
+        $('#DESCRIPCION').css('border-color', 'lightgrey');
+        $(".modal-title").text("Nuevo registro");
+    }
+
+    function Create() {
+        var res = validate();
+        if (res == false) {
+            return false;
+        }
+        var CatalogoObj = {
+
+            catalogo: {
+                ID: null,
+                DESCRIPTION: $('#DESCRIPCION').val(),
+                ORIGEN: $('#Origen').val(),
+                OTRA_DESC: null
+            }
+            , enumeracion: $('#EnumCatalogo').val()
+
+        };
+       
+        $.ajax({
+            url: "/Catalogos/Create",
+            data: JSON.stringify(CatalogoObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $('#myModal').modal('hide');
+                procesaResultado(result);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function procesaResultado(result) {
+        $(".modaldelete-title_alert").text(result.message);
+        $('#AlertModalMessage').modal('show');
+        $('#EnumCatalogo').val(result.Enumeracion);
+        
+    }
+
+    function OkAlertMessage() {
+        $(".modaldelete-title_alert").text("");
+        $('#AlertModalMessage').modal('hide');
+        var enumeracion = $('#EnumCatalogo').val();
+        var url = '@Url.Action("Index", "Catalogos", new { enumCatalogo = "REPLACEME"})';
+        window.location.href = url.replace('REPLACEME', enumeracion);
+        return false;
+    }
+
+
+    function funEliminar(id, itemText) {
+        $('#ID').val(id);
+        var msg = '¿Desea eliminar ' + itemText + '?';
+        $(".modaldelete-title").text(msg);
+        $('#confirmModal').modal('show');
+        return false;
+    }
+
+    function funEditar(id) {
+        $('#ID').val(id);
+        $('#DESCRIPCION').css('border-color', 'lightgrey');
+        var enumeracion = $('#EnumCatalogo').val();
+        $(".modal-title").text("Editar registro");
+        $.ajax({
+            url: "/Catalogos/Edit/",
+            typr: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            data: { Id: id, enumeracion: enumeracion },
+            success: function (result) {
+                $('#ID').val(result.ID);
+                $('#DESCRIPCION').val(result.DESCRIPTION);
+                $('#Origen').val(result.ORIGEN);
+                $('#myModal').modal('show');
+                $('#btnUpdate').show();
+                $('#btnAdd').hide();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+    function Update() {
+        var res = validate();
+        if (res == false) {
+            return false;
+        }
+        var CatalogoObj = {
+
+            catalogo: {
+                ID: $('#ID').val(),
+                DESCRIPTION: $('#DESCRIPCION').val(),
+                ORIGEN: $('#Origen').val(),
+                OTRA_DESC: null
+            }
+            , enumeracion: $('#EnumCatalogo').val()
+
+        };
+        $.ajax({
+            url: "/Catalogos/Update",
+            data: JSON.stringify(CatalogoObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $('#myModal').modal('hide');
+                $('#DESCRIPCION').val("");
+                $('#ID').val(0);
+                procesaResultado(result);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function validate() {
+        var isValid = true;
+        if ($('#DESCRIPCION').val().trim() == "") {
+            $('#DESCRIPCION').css('border-color', 'Red');
+            isValid = false;
+        }
+        else {
+            $('#DESCRIPCION').css('border-color', 'lightgrey');
+        }
+        return isValid;
+    }
+
+
+</script>
+
+
+
+
+

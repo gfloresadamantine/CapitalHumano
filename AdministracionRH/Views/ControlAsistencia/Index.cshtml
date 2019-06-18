@@ -1,0 +1,241 @@
+﻿
+@model AdministracionRH.Models.ControlAsistenciaSearch
+
+@section scripts {
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <link href="~/Content/App/Jerarquias.css" rel="stylesheet" />
+}
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var _enumPeriodoBusqueda = (int)ViewBag.enumPeriodoBusqueda;
+}
+
+<script type="text/javascript">
+    var message = '@message';
+    if (message)
+        alert(message);
+
+
+    function SubmitEmpleado(id) {
+      //  alert(id);
+        $("#SelectedEmployeeId").val(id);
+        $("form").submit();
+        return false;
+    }
+
+    function SubmitForm(value) {
+
+        if (value == 3)
+            $("#ClickOnButton").val("DescargarReporte");
+
+        if (value == 4)
+            $("#ClickOnButton").val("EnviarReporteSemanal");
+
+        $("form").submit();
+        return false;
+    }
+
+
+
+
+
+
+    $(function () {
+        $("#verticalButton").click(function () {
+            $("#ClickOnButton").val("Consultar");
+            $("form").submit();
+            return false;
+        })
+
+        $(".cssfechas").hide();
+
+        var enumPeriodoBusqueda = '@_enumPeriodoBusqueda';
+
+        if (enumPeriodoBusqueda == 4) {
+            $(".cssfechas").show();
+        }
+
+     
+        $("#btnEstaSemana").click(function () {
+            $("#enumPeriodoBusqueda").val(1);
+            $("#ClickOnButton").val("Consultar");
+            $(".cssfechas").hide();
+            $("form").submit();
+            return false;
+
+        });
+        $("#btnSemanaAnterior").click(function () {
+            $("#enumPeriodoBusqueda").val(2);
+            $("#ClickOnButton").val("Consultar");
+            $(".cssfechas").hide();
+            $("form").submit();
+            return false;
+        });
+        $("#btnDosSemanas").click(function () {
+            $("#enumPeriodoBusqueda").val(3);
+            $("#ClickOnButton").val("Consultar");
+            $(".cssfechas").hide();
+            $("form").submit();
+            return false;
+        });
+        $("#btnOtro").click(function () {
+            $("#enumPeriodoBusqueda").val(4);
+            $("#ClickOnButton").val("Consultar");
+            $(".cssfechas").toggle();
+        });
+
+        var dtfechaInicial = $('#dtfechaInicial'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaInicial.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+        var dtfechaFinal = $('#dtfechafinal'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaFinal.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+    });
+
+</script>
+
+
+
+<div class="container">
+    <h3>Reporte de asistencias</h3>
+
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Búsqueda</strong></div>
+
+            <div class="panel-body" style="font-size:10px;">
+                @using (Html.BeginForm("Index", "ControlAsistencia", FormMethod.Post, new { @class = "form-inline", role = "form" }))
+                {
+                    @Html.Hidden("Rol", Model.Rol)
+                    @Html.Hidden("EmployeeIdConnected", Model.EmployeeIdConnected)
+                    @Html.Hidden("enumPeriodoBusqueda", Model.enumPeriodoBusqueda)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NombreEmpleado)
+                        <br />
+                        @Html.TextBoxFor(model => model.NombreEmpleado, new { size = "20", @class = "form-control", @placeholder = "Empleado", style = "font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AreaId)
+                        <br />
+                        @Html.DropDownListFor(model => model.AreaId, (IEnumerable<SelectListItem>)ViewBag.ListaAreas, "-- Areas -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PositionId)
+                        <br />
+                        @Html.DropDownListFor(model => model.PositionId, (IEnumerable<SelectListItem>)ViewBag.ListaPuestos, "-- Puesto -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BossId)
+                        <br />
+                        @Html.DropDownListFor(model => model.BossId, (IEnumerable<SelectListItem>)ViewBag.ListaJefes, "-- Jefe -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        <span><b>Semana</b></span><br />
+                        @*<span class="glyphicon glyphicon-calendar" style="color:red; font-size:9px;"></span>
+                            @Html.ActionLink("Semana actual", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })
+                            &nbsp;
+                            <span class="glyphicon glyphicon-calendar" style="color:red; font-size:9px;"></span>
+                            @Html.ActionLink("semana anterior", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })
+                            &nbsp;
+                            <span class="glyphicon glyphicon-calendar" style="color:red; font-size:9px;"></span>
+                            @Html.ActionLink("Hace 2 semanas", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })
+                            &nbsp;
+                            <span class="glyphicon glyphicon-calendar" style="color:red; font-size:9px;"></span>
+                            @Html.ActionLink("Otro periodo", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })*@
+                                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                                      <button id="btnEstaSemana" type="button" class="btn btn-sm" data-toggle="tooltip" title="Descargar reporte semana actual">Actual</button>
+                                                      <button id="btnSemanaAnterior" type="button" class="btn btn-sm" data-toggle="tooltip" title="Descargar reporte semana anterior">Anterior</button>
+                                                      <button id="btnDosSemanas" type="button" class="btn btn-sm" data-toggle="tooltip" title="Descargar reporte de 2 semanas atrás">2 Semanas</button>
+                                                      <button id="btnOtro" type="button" class="btn btn-sm" data-toggle="tooltip" title="Definir periodo de búsqueda">Otro periodo</button>
+                                                  </div>
+
+                    </div>
+
+
+                    <div class="form-group cssfechas">
+                        @Html.LabelFor(model => model.FechaInicial)
+                        <br />
+                        @Html.TextBoxFor(model => model.FechaInicial, new { @id = "dtfechaInicial", size = "12", @class = "datepicker  form-control", @placeholder = "Desde", style = "font-size:12px;" })
+                        @Html.ValidationMessageFor(model => model.FechaInicial, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group cssfechas">
+                        @Html.LabelFor(model => model.FechaFinal)
+                        <br />
+                        @Html.TextBoxFor(model => model.FechaFinal, new { @id = "dtfechafinal", size = "12", @class = "datepicker  form-control", @placeholder = "Hasta", style = "font-size:12px;" })
+                        @Html.ValidationMessageFor(model => model.FechaFinal, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group cssfechas">
+                        <br />
+                        @*<button id="verticalButton" type="submit" class="btn btn-primary button" style="font-size:11px;">Filtrar</button>*@
+                        <button id="verticalButton" class="btn btn-primary button" style="font-size:11px;">Filtrar</button>
+                    </div>
+                    @Html.HiddenFor(modelItem => Model.ClickOnButton)
+                    if (Model.ListaRangoFechas != null)
+                    {
+                        for (var i = 0; i < Model.ListaRangoFechas.Count(); i++)
+                        {
+                            @Html.HiddenFor(modelItem => Model.ListaRangoFechas[i])
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <br />
+    @if (Model.ListaEmpleado_Asistenica != null)
+    {
+
+
+        if (Model.ListaEmpleado_Asistenica.Count > 0)
+        {
+            <div id="divDetalle" class="panel panel-default" style="align-content:initial">
+                <div class="panel-heading">
+                    <strong>Resumen asistencia de empleados</strong><span class="pull-right clickable" data-effect="hide"><i class="fa fa-times"></i></span>
+                    <div style="float:right">
+                        <span class="glyphicon glyphicon-download" style="color:red; font-size:11px;"></span>
+                        @Html.ActionLink("Descargar reporte", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })
+                    </div>
+                </div>
+                <div class="panel-body" style="font-size:10px;">
+                    <div class="table-responsive horizontal-scroll-wrapper">
+
+                        @*<span class="glyphicon glyphicon-download" style="color:red; font-size:11px;"></span>
+                        @Html.ActionLink("Descargar reporte", "CrearReporte", "ControlAsistencia", null, new { onclick = "return SubmitForm(3);", style = "font-size:13px;" })
+                        &nbsp; &nbsp;  &nbsp; &nbsp;*@
+                        <br />
+                        <br />
+                        @Html.Partial("_DetalleEmpleadoAsistencia", Model)
+                    </div>
+                </div>
+            </div>
+        }
+
+       
+
+
+    }
+
+
+</div>
+
+
+

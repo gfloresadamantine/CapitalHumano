@@ -1,0 +1,101 @@
+﻿.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: yellowgreen; /*Sets the text hover color on navbar*/
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: white; /*BACKGROUND color for active*/
+    background-color: #030033;
+}
+
+.navbar-default {
+    background-color: #0f006f;
+    border-color: #030033;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #66CCFF; /*change color of links in drop down here*/
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    text-decoration: none;
+    background-color: yellowgreen; /*Change rollover cell color here*/
+}
+
+
+.navbar-default .navbar-nav > li > a {
+    color: white; /*Change active text color here*/
+}
+
+
+
+html,
+body {
+    height: 100%;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+
+
+#footer{
+  background-color: #FCFCF8;
+  height: 60px;
+  /*position: fixed;*/
+  
+  bottom: 0px;
+  left: 0px;
+  line-height: 50px;
+  color: #aaa;
+  text-align: center;
+  width: 100%;
+  color:#2a6496;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+
+/*.navbar-brand
+{
+    position:absolute;
+    width: 100%;
+    left: 0;
+    text-align: left;
+    margin:0 auto;
+    font-size:15px;
+}*/
+
+
+.navbar-brand
+{
+    font-size:18px;
+}
+
+
+.navbar-default .navbar-brand {
+  color:#D0D3D4;
+}
+
+
+.lstinline li
+{
+
+margin-right:10px;
+
+}
+
+.white, .white a {
+  color: #fff;
+}

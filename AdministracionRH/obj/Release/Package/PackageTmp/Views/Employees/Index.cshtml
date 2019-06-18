@@ -1,0 +1,333 @@
+﻿@model AdministracionRH.Models.EmployeesModel
+@{
+    ViewBag.Title = "Index";
+}
+@section scripts {
+
+    @*<link href="~/Content/App/EmployeeCss.css" rel="stylesheet" />*@
+    <link href="@Url.Content("~/Content/App/EmployeeCss.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <script src="~/Scripts/jquery.simplePagination.js"></script>
+    <link href="~/Content/simplePagination.css" rel="stylesheet" />
+
+}
+
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var RecordCount = TempData["RecordCount"] ?? 0;
+    var PageCount = TempData["PageCount"] ?? 0;
+    var CurrentPageIndex = TempData["CurrentPageIndex"];
+    var pageSize = Model.PageSize;
+  
+
+
+}
+
+
+<script type="text/javascript">
+    var message = '@message';
+    if (message)
+        alert(message);
+
+
+    function SubmitEmpleado(id) {
+      //  alert(id);
+        $("#SelectedEmployeeId").val(id);
+        $("form").submit();
+        return false;
+    }
+
+
+    $(function () {
+    var RecordCount = '@PageCount'
+    var CurrentPageIndex = '@CurrentPageIndex'
+        var pageSize = '@pageSize'
+
+
+
+
+        $("#span_recordcount").hide();
+
+        $('#selector').pagination({
+            items: RecordCount,
+            Pages: pageSize,
+            currentPage: CurrentPageIndex,
+            cssStyle: 'compact-theme',
+            //      edges: 2,
+            prevText: 'Anterior',
+            nextText: 'Siguiente',
+            onPageClick: function (pageNumber) {
+                $("#CurrentPageIndex").val(pageNumber);
+                $("form").submit();
+            }
+        });
+
+        var dtfechaInicial = $('#dtfechaInicial'); //our date input has the name "date"
+    var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaInicial.datepicker({
+        format: 'dd/mm/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    })
+
+
+        var dtfechaFinal = $('#dtfechafinal'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaFinal.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+    });
+
+</script>
+
+
+
+<div class="container">
+    <h3>Empleados</h3>
+
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Búsqueda</strong></div>
+            <div class="panel-body" style="font-size:10px;">
+                @using (Html.BeginForm("Index", "Employees", FormMethod.Post, new { @class = "form-inline", role = "form" }))
+    {
+            @Html.Hidden("EmployeeIdConected", Model.EmployeeIdConected)
+            @Html.Hidden("Rol", Model.Rol)
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.Nombre)*@
+                @Html.TextBoxFor(model => model.Nombre, new { size = "20", @class = "form-control", @placeholder = "Empleado", style = "font-size:12px;" })
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.Area)*@
+                @*@Html.TextBoxFor(model => model.Area, new { size = "20", @class = "form-control", @placeholder = "Area", style = "font-size:12px;" })*@
+                @*@Html.LabelFor(model => model.AreaId, htmlAttributes: new { @class = "MyLabel" })*@
+                @Html.DropDownListFor(model => model.AreaId, Model.ListaAreas, "-- Areas -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.Posicion)*@
+                @*@Html.TextBoxFor(model => model.Posicion, new { size = "20", @class = "form-control", @placeholder = "Puesto", style = "font-size:12px;" })*@
+                @Html.DropDownListFor(model => model.PositionId, Model.ListaPuestos, "-- Puesto -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.Jefe)*@
+                @*@Html.TextBoxFor(model => model.Jefe, new { size = "20", @class = "form-control", @placeholder = "Jefe", style = "font-size:12px;" })*@
+                @Html.DropDownListFor(model => model.BossId, Model.ListaJefes, "-- Jefe -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+            </div>
+
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.OperacionId, Model.ListaSinOperacion, "-- Sin Datos -- ", new { @class = "form-control", style = "width:150px; font-size:12px;" })
+            </div>
+
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.FechaInicial)*@
+                @Html.TextBoxFor(model => model.FechaInicial, new { @id = "dtfechaInicial", size = "12", @class = "datepicker  form-control", @placeholder = "ingreso inicial", style = "font-size:12px;" })
+            </div>
+
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.FechaFinal)*@
+                @Html.TextBoxFor(model => model.FechaFinal, new { @id = "dtfechafinal", size = "12", @class = "datepicker  form-control", @placeholder = "Ingreso final", style = "font-size:12px;" })
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.Activo)
+                @Html.CheckBoxFor(model => model.Activo)*@
+                @Html.LabelFor(model => model.FingerPrint)
+                @Html.CheckBoxFor(model => model.FingerPrint)
+            </div>
+            <div class="form-group">
+            
+            </div>
+
+            @*<div class="form-group">
+        @Html.LabelFor(model => model.boolSinJefe)
+        @Html.CheckBoxFor(model => model.boolSinJefe)
+    </div>*@
+            <button id="verticalButton" type="submit" class="btn btn-primary button" style="font-size:11px;">Filtrar</button>
+            <br />
+            <br />
+{
+            <span class="glyphicon glyphicon-plus"></span>
+            @Html.ActionLink("Nuevo empleado", "Crear", "Employees", new { style = "font-size:12px;" });
+}
+
+}
+            </div>
+        </div>
+        @*@{
+                var record = RecordCount;
+
+            }
+            @if (record != -1)
+            {
+
+            }
+            <span style="font-size:11px;"><strong> @record Registros Encontrados</strong></span>*@
+
+
+        @if (Model.LstEmployees != null)
+        {
+            for (var i = 0; i < Model.LstEmployees.Count(); i++)
+            {
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].FirstName)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].LastName)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].MiddleName)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].Rfc)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].Curp)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].NSS)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].BirthDay)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].AdmissionDate)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].PhoneNumber)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].CellPhoneNumber)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].OfficePhone)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].PersonalEmail)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].CompanyEmail)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].PositionName)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].AreaName)
+                @Html.HiddenFor(modelItem => Model.LstEmployees[i].BossName)
+
+            }
+        }
+
+
+        @if (Model.LstEmployees != null)
+        {
+            if (Model.LstEmployees.Count() > 0)
+            {
+                <br />
+                <div id="divDetalle" class="panel panel-default">
+                    <div class="panel-heading"><strong>Resumen empleados</strong><span class="pull-right clickable" data-effect="hide"><i class="fa fa-times"></i></span></div>
+                    <div class="panel-body" style="font-size:10px;">
+                        <div id="tableWrapper" class="table-responsive">
+                            @using (Html.BeginForm("Index", "Employees", FormMethod.Post, new { @class = "form-inline", role = "form", id = "myForm" }))
+                            {
+
+                                @Html.Hidden("SortField", Model.SortField)
+                                @Html.Hidden("SortDirection", Model.SortDirection)
+                                @Html.Hidden("PageCount", Model.PageCount)
+                                @Html.Hidden("PageSize", Model.PageSize)
+                                @Html.Hidden("CurrentPageIndex", Model.CurrentPageIndex)
+                                @Html.Hidden("EmployeeIdConected", Model.EmployeeIdConected)
+                                @Html.Hidden("Rol", Model.Rol)
+                                @Html.Hidden("FingerPrint", Model.FingerPrint)
+
+                                @Html.HiddenFor(model => model.SelectedEmployeeId)
+                                @Html.HiddenFor(model => model.Nombre)
+                                @Html.HiddenFor(model => model.Area)
+                                @Html.HiddenFor(model => model.Posicion)
+                                @Html.HiddenFor(model => model.Jefe)
+                                @Html.HiddenFor(model => model.FechaInicial)
+                                @Html.HiddenFor(model => model.FechaFinal)
+                                @Html.HiddenFor(model => model.Activo)
+                                @Html.HiddenFor(model => model.AreaId)
+                                @Html.HiddenFor(model => model.PositionId)
+                                
+
+
+                                if (Model.LstEmployees.Count() > 0)
+                                {
+                                    <span style="font-size:11px;"><strong> @RecordCount Registros Encontrados</strong></span>
+                                }
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead class="thead">
+                                        <tr>
+                                            @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.DireccionGeneral)
+                                            {
+                                                <th></th>
+                                            }
+
+                                            <th style="white-space:nowrap" class="text-center">NO. EMPLEADO</th>
+                                            <th style="white-space:nowrap" class="text-center">NOMBRE</th>
+                                            <th style="white-space:nowrap" class="text-center">GAFETE</th>
+                                            @*<th style="white-space:nowrap" class="text-center">RFC</th>
+                                            <th style="white-space:nowrap" class="text-center">CURP</th>
+                                            <th style="white-space:nowrap" class="text-center">NSS</th>*@
+                                            <th style="white-space:nowrap" class="text-center">PUESTO</th>
+                                            <th style="white-space:nowrap" class="text-center">AREA</th>
+                                            @*<th style="white-space:nowrap" class="text-center">JEFE</th>*@
+                                            @*<th style="white-space:nowrap" class="text-center">FECHA NACIMIENTO</th>*@
+                                            @*<th style="white-space:nowrap" class="text-center">FECHA INGRESO</th>*@
+                                            @*<th style="white-space:nowrap" class="text-center">TELEFONO</th>*@
+                                            <th style="white-space:nowrap" class="text-center">EXTENSIÓN</th>
+                                            <th style="white-space:nowrap" class="text-center">CELULAR</th>
+                                            @*<th style="white-space:nowrap" class="text-center">EMAIL PERSONAL</th>*@
+                                            <th style="white-space:nowrap" class="text-center">EMAIL EMPRESA</th>
+                                            <th style="white-space:nowrap" class="text-center">HUELLA REGISTRADA</th>
+                                            <th style="white-space:nowrap" class="text-center">ESTACIONAMIENTO</th>
+                                            <th class="text-center">ESTATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.LstEmployees)
+                                        {
+
+                                            <tr>
+
+                                                @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.DireccionGeneral)
+                                                {
+                                                    <td>
+                                                        <span class="glyphicon glyphicon-edit"></span>
+                                                        @Html.ActionLink("Editar", "Editar", "Employees", new
+                                                        {
+                                                            @class = "glyphicon glyphicon-edit",
+                                                            @id = item.EmployeeId
+                                                        }, null)
+                                                    </td>
+                                                }
+
+
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.CardNumber) </td>
+                                                <td style="white-space:nowrap">@(String.Format("{0} {1} {2}", item.FirstName, item.LastName, item.MiddleName))</td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.CardId) </td>
+                                                @*<td>@Html.DisplayFor(modelItem => item.Rfc) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Curp) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.NSS) </td>*@
+                                                <td>@Html.DisplayFor(modelItem => item.PositionName) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.AreaName) </td>
+                                                @*<td>@Html.DisplayFor(modelItem => item.BossName) </td>*@
+                                                @*<td class="text-center">@Html.DisplayFor(modelItem => item.BirthDay) </td>*@
+                                                @*<td class="text-center">@Html.DisplayFor(modelItem => item.AdmissionDate) </td>*@
+                                                @*<td>@Html.DisplayFor(modelItem => item.PhoneNumber) </td>*@
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.OfficeExt) </td>
+
+                                                <td style="white-space:nowrap">@Html.DisplayFor(modelItem => item.CellPhoneNumber) </td>
+                                                @*<td>@Html.DisplayFor(modelItem => item.PersonalEmail) </td>*@
+                                                <td>@Html.DisplayFor(modelItem => item.CompanyEmail) </td>
+                                                <td class="text-center"> @(item.FingerPrint ==true?"Si":"No") </td>
+                                                <td class="text-center">@item.ParkingSpace </td>
+                                                <td class="text-center">@(Model.Activo ? "Activo" : "Baja") </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            }
+
+
+                            <div id="selector"></div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (Model.LstEmployees.Count() == 0)
+            {
+                <span id="span_recordcount" style="font-size:11px;"><strong> @Model.LstEmployees.Count() Registros Encontrados</strong></span>
+            }
+
+        }
+    </div>
+
+
+</div>
+

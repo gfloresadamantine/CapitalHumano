@@ -1,0 +1,107 @@
+﻿
+@{
+    var menuList = ViewBag.menusList as List<AdministracionRH.Models.MenuItem>;
+    @ShowTree(menuList);
+}
+
+
+@helper ShowTree(List<AdministracionRH.Models.MenuItem> menusList)
+    {
+        if (menusList != null)
+        {
+            <table id="myTabla" class="table table-bordered table-condensed table-striped table-fit" style="font-size:11px">
+                <th></th>
+                <th></th>
+                <th style="visibility:visible">ID</th>
+                <th>NOMBRE</th>
+                @foreach (var item in menusList)
+                {
+
+                    <tr>
+                        <td>
+                            @if (item.Id == 25 || item.Id == 19 || item.Id == 428 || item.Id == 364 || item.Id == 422)
+                            {
+                                <a href="#" class="expand-btn"><span id="iconclass" class="glyphicon glyphicon-chevron-right"></span></a>
+
+                            }
+                        </td>
+                        <td style="text-align:center"> <input type="checkbox" data-val="true" data-val-required="The IsChecked field is required." id="@("chk_"+item.Id )" class="@("class_"+item.ParentId)" name="IsChecked" value=@item.boolSelectd></td>
+                        <td style="visibility:visible">@item.Id</td>
+                        <td>@item.Name</td>
+                    </tr>
+
+                    if (item.Children != null)
+                    {
+                        if (item.Children.Any())
+                        {
+                            <tr class="expand collapse">
+                                <td></td>
+                                <td colspan="2"></td>
+                                <td style="visibility:visible"></td>
+                                <td>@ShowTree(item.Children.ToList())</td>
+
+                            </tr>
+
+                        }
+
+                    }
+                }
+            </table>
+        }
+}
+
+<script type="text/javascript">
+
+    $("input:checkbox").prop("checked", true);
+
+    $("input:checkbox").click(function () {
+        //alert($(this).attr('class'));
+        var isChecked = $(this).is(":checked");
+        //down
+        $(this).closest('tr').next().find("input:checkbox").prop("checked", isChecked);
+
+
+        ////up
+        $(this).closest('tr').prev("td").find("input:checkbox").prop("checked", function () {
+            return $(this).closest('tr').next("td").find(":checked").length;
+        });
+
+    });
+
+   
+
+    $(function () {
+        $('.expand').toggle();      // Default - hide the table row of Course information
+        $('.collapse').hide();
+        //and also hide the Collapse text from
+        //Student information's action column
+
+        $('.expand-btn, .collapse-btn').click(function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.expand, .collapse').toggle();    // toggle to display either Expand or
+            // Collapse text in the Student row
+            tr.next().toggle();    // toggle to display table row with Course information
+
+            if ($('#iconclass').hasClass('glyphicon.glyphicon-chevron-right'))
+                $("#iconclass").removeClass('glyphicon.glyphicon-chevron-right').addClass('glyphicon.glyphicon-chevron-up');
+
+            if ($('#iconclass').hasClass('glyphicon.glyphicon-chevron-up'))
+                $("#iconclass").removeClass('glyphicon.glyphicon-chevron-up').addClass('glyphicon.glyphicon-chevron-right');
+
+        });
+
+
+        //$('.expand-btn, .collapse-btn').on("click", function () {
+        //    var tr = $(this).parents('tr:first');
+        //    tr.find('.expand, .collapse').toggle();    // toggle to display either Expand or
+        //    // Collapse text in the Student row
+        //    tr.next().toggle();    // toggle to display table row with Course information
+        //    if ($('#iconclass').hasClass('glyphicon glyphicon-collapse-up'))
+        //        $("#iconclass").removeClass('glyphicon glyphicon-collapse-up').addClass('glyphicon glyphicon-expand');
+        //    else
+        //        $("#iconclass").removeClass('glyphicon glyphicon-expand').addClass('glyphicon glyphicon-collapse-up');
+        //});
+
+    });
+
+</script>

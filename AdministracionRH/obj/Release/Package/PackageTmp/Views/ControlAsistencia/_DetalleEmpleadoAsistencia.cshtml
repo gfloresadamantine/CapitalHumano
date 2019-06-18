@@ -1,0 +1,353 @@
+﻿@model AdministracionRH.Models.ControlAsistenciaSearch
+@using System.Globalization
+
+@{
+    var menusList = ViewBag.menusList as List<AdministracionRH.Models.Empleado_Asistencia>;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+
+    @ShowTree(menusList);
+}
+
+
+
+
+@functions{
+
+    private TimeSpan ConvertTimeSpan(string Cadena)
+    {
+        return DateTime.Parse(Cadena, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+    }
+
+    public string ApplyFormat(object horaInicial, string horaFinal, string horasLaboradas)
+    {
+        string backColor = "";
+
+        if (horasLaboradas !="0")
+        {
+            //Si es retardo
+            if (TimeSpan.Compare(ConvertTimeSpan(horaInicial.ToString()), ConvertTimeSpan("08:45:59")) == 1 && TimeSpan.Compare(ConvertTimeSpan(horaInicial.ToString()), ConvertTimeSpan("09:00:00")) == -1)
+                return "background-color :#FFFFD5;font-weight: bold";
+
+            //Si es falta
+            if (ComparaFechas(horaInicial.ToString(), horaFinal) ==1)
+                return "background-color:#ff9161;font-weight: bold";
+        }
+        return backColor;
+    }
+
+    private int ComparaFechas(string horaInicial, string horaFinal)
+    {
+
+        return TimeSpan.Compare(ConvertTimeSpan(horaInicial), ConvertTimeSpan(horaFinal));
+    }
+
+    public string FormatHorasAcumuladas(string horasAcumuladas)
+    {
+        string ColorHorasLaboradasPorDebajoRequerido = string.Empty;
+        int horas = 0;
+        int minutos = 0;
+        if (horasAcumuladas != "0")
+        {
+            string[] splitHorasAcumuladas = horasAcumuladas.Split(':');
+
+            if (splitHorasAcumuladas.Count() >1)
+            {
+                horas = Convert.ToInt32(splitHorasAcumuladas[0]);
+                minutos = Convert.ToInt32(splitHorasAcumuladas[1]);
+            }
+
+            //horas = Convert.ToInt32(horasAcumuladas.Substring(0, 2));
+            //minutos = Convert.ToInt32(horasAcumuladas.Substring(3, 2));
+            if (horas >= 40)
+            {
+                if (horas == 40)
+                {
+                    if (minutos < 30)
+                    {
+                        ColorHorasLaboradasPorDebajoRequerido = "color:Red;font-weight: bold";
+                    }
+                }
+
+            }
+            else
+            {
+                ColorHorasLaboradasPorDebajoRequerido = "color:Red;font-weight: bold";
+            }
+        }
+        else
+        {
+            ColorHorasLaboradasPorDebajoRequerido = "color:Red;font-weight: bold";
+        }
+        return ColorHorasLaboradasPorDebajoRequerido;
+    }
+
+}
+
+
+<div class="container">
+
+
+
+
+
+    @helper ShowTree(List<AdministracionRH.Models.Empleado_Asistencia> menusList)
+        {
+            <table id="myTabla" class="table table-condensed table-bordered table-striped" style="font-size:11px">
+                <tr>
+                    <th></th>
+                    <th style="text-align:center; vertical-align: middle; background-color:#428bca; color:white">Nombre</th>
+                    @foreach (var itemFecha in Model.ListaRangoFechas)
+                    {
+                        <th style="text-align:center; vertical-align: middle;background-color:#428bca; color:white">
+
+                            @{
+                                CultureInfo ci = new CultureInfo("es-MX");
+                                var dia = ci.DateTimeFormat.GetDayName(@itemFecha.DayOfWeek);
+
+                            }
+                            @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(dia)
+
+                            @itemFecha.ToShortDateString()
+                            <table style="text-align:center; vertical-align: middle; background-color:#428bca; color:white;width:100%">
+                                <tr>
+                                    <th style="text-align:center; vertical-align: middle;white-space:nowrap;width:35%">
+                                        Entrada
+                                    </th>
+                                    <th style="text-align:center; vertical-align: middle;white-space:nowrap;width:35%">
+                                        Salida
+                                    </th>
+                                    <th style="text-align:center; vertical-align: middle;white-space:nowrap; color:navy;width:30%">
+                                        Horas <br />Laboradas
+                                    </th>
+                                </tr>
+                            </table>
+                        </th>
+                    }
+
+                    @{
+                        CultureInfo culture = new CultureInfo("es-MX");
+                        var DiaSemanaInicial = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(culture.DateTimeFormat.GetDayName(@Model.ListaRangoFechas.Select(g => g).Min().DayOfWeek));
+                        var DiaSemanaFinal = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(culture.DateTimeFormat.GetDayName(@Model.ListaRangoFechas.Select(g => g).Max().DayOfWeek));
+
+                    }
+
+
+
+                    <th style="text-align:center; vertical-align: middle; background-color:#428bca; color:white;width:100%">
+                        <table>
+                            <tr>
+                                <th colspan="6" style="text-align:center;">Periodo del @DiaSemanaInicial  @Model.ListaRangoFechas.Select(g => g).Min().ToShortDateString() al  @DiaSemanaFinal  @Model.ListaRangoFechas.Select(g => g).Max().ToShortDateString() </th>
+                            </tr>
+                            <tr>
+                                <th style="width:35px;text-align:center; vertical-align: middle;white-space:nowrap;background-color:navy;text-align:center; color:white">Horas <br />acumuladas</th>
+                                <th style="width:35px;text-align:center; vertical-align: middle;white-space:nowrap;background-color:navy;text-align:center; color:white">Total <br />retardos</th>
+                                <th style="width:20%;text-align:center; vertical-align: middle;white-space:nowrap;background-color:navy;text-align:center; color:white">Faltas por <br />retardos</th>
+                                <th style="width:20%;text-align:center; vertical-align: middle;white-space:nowrap;background-color:navy;text-align:center; color:white">Faltas por <br />inasistencia</th>
+                                <th style="width:20%;text-align:center; vertical-align: middle;white-space:nowrap;background-color:navy;text-align:center; color:white">Total<br />Faltas</th>
+                            </tr>
+                        </table>
+                    </th>
+
+
+
+                </tr>
+                @foreach (var item in menusList)
+                {
+
+                    <tr>
+
+                        <td>
+                            @if (item.Es_Jefe == 1 && item.Children.Count() > 0)
+                            {
+
+                                <a href="#" class="expand-btn"><span id="iconclass" class="glyphicon glyphicon-chevron-right"></span></a>
+                            }
+                        </td>
+
+                        <td style="vertical-align: auto;white-space:nowrap;width:50px;" data-toggle="tooltip; " title="@(item.Puesto)">@item.Nombre</td>
+                        @foreach (var fechaReporte in Model.ListaRangoFechas)
+                        {
+                            var match = item.LstDetalleAsistencia.Where(f => ((DateTime)f.Fecha).ToShortDateString() == fechaReporte.ToShortDateString()).FirstOrDefault();
+
+
+                            var BackGroudColor = match == null || string.IsNullOrEmpty(match.Entrada) ? "" : ApplyFormat(match.Entrada, "09:00:00", match.HorasLaboradas);
+                            var HorasLaboradasBackColor = string.Empty;
+                            var ColorHorasLaboradasPorDebajoRequerido = string.Empty;
+                            if (match != null)
+                            {
+                                HorasLaboradasBackColor = ((DateTime)match.Fecha).DayOfWeek == DayOfWeek.Saturday || ((DateTime)match.Fecha).DayOfWeek == DayOfWeek.Sunday ? "" : match.HorasLaboradas.ToString() == "0" ? "background-color:#ff9161" : "";
+
+                            }
+                            else
+                            {
+                                HorasLaboradasBackColor = ((DateTime)fechaReporte).DayOfWeek == DayOfWeek.Saturday || ((DateTime)fechaReporte).DayOfWeek == DayOfWeek.Sunday ? "" : "background-color:#ff9161";
+                            }
+
+
+                            <td>
+                                <table style="width:100%; vertical-align:middle">
+                                    <tr style="height:1px;">
+                                        <td title="Entrada" style="text-align:center; vertical-align: middle;width:25%;white-space:nowrap;">
+                                            <span><b>
+                                                @*<span style="color:@(match == null?"Red":"");"><b>*@
+                                                @if (@match != null && !string.IsNullOrEmpty(match.Entrada))
+                                                {
+
+                                                    if (match.Entrada == match.Salida)
+                                                    {
+                                                        if(ComparaFechas(match.Entrada, "15:00:00") == -1)
+                                                        {
+                                                            @match.Entrada.Substring(0,5)
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/Images/cancel7.png" width="12" height="12" alt="sin registro">
+                                                        }
+                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        @match.Entrada.Substring(0,5)
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                   
+                                                    <img src="~/Images/cancel7.png" width="12" height="12" alt="sin registro">
+                                                }
+                                                     </b> </span>
+                                        </td>
+                                        <td title="Salida" style="text-align:center; vertical-align: middle;width:25%;white-space:nowrap;">
+                                            
+                                            <span><b>
+                                             @*<span style="color:@(match == null|| string.IsNullOrEmpty(match.Entrada)|| match.Entrada==match.Salida?"Red":"");"><b>*@
+                                                @if (@match == null || ( string.IsNullOrEmpty(match.Entrada) && string.IsNullOrEmpty(match.Salida)))
+                                                {
+                                                    
+                                                     <img src="~/Images/cancel7.png" width="12" height="12" alt="sin registro">
+                                                }
+                                                else
+                                                {
+
+                                                    if (match.Entrada == match.Salida)
+                                                    {
+                                                        if (ComparaFechas(match.Salida, "15:00:00") == 1)
+                                                        {
+                                                            @match.Salida.Substring(0, 5);
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/Images/cancel7.png" width="12" height="12" alt="sin registro">
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+
+                                                         @match.Salida.Substring(0, 5);
+                                                    }
+
+
+                                                }
+                                                     </b> </span>
+
+                                        </td>
+                                        <td style="text-align:center; vertical-align: middle; white-space:nowrap; color:@((match != null && match.HorasLaboradas =="0") || match == null?"Red":"")">
+                                            <b>@(match != null ? @match.HorasLaboradas =="0" ? @match.HorasLaboradas :@match.HorasLaboradas.Substring(0,5) : "0")</b>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        }
+                        <td colspan="6">
+                            <table style="width:100%;">
+                                <tr>
+                                    <td style="width:20%;text-align:center; vertical-align: center;color:darkblue;@(FormatHorasAcumuladas(item.HorasAcumuladas))"><b>@item.HorasAcumuladas </b></td>
+                                    <td style="width:20%;text-align:center; vertical-align: center;color:darkblue;color:@(item.TotalRetardos !=0?"Red":"")"><b>@item.TotalRetardos  </b></td>
+                                    <td style="width:20%;text-align:center; vertical-align: center;color:darkblue;color:@(item.TotalFaltasPorRetardos !=0?"Red":"")"><b>@item.TotalFaltasPorRetardos  </b></td>
+                                    <td style="width:20%;text-align:center; vertical-align: center;color:darkblue;"><b>@item.TotlaFaltasInAsistencia</b></td>
+                                    <td style="width:20%;text-align:center; vertical-align: center;color:darkblue;color:@(item.TotalFaltas !=0?"Red":"")"><b>@item.TotalFaltas  </b></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    if (item.Children != null)
+                    {
+                        if (item.Children.Any())
+                        {
+                            <tr class="expand collapse">
+
+                                <td></td>
+                                <td colspan="21">
+                                    @ShowTree(item.Children.ToList())
+                                </td>
+                            </tr>
+
+                        }
+
+                    }
+                }
+
+
+            </table>
+}
+
+
+</div>
+
+<script type="text/javascript">
+    var message = '@message';
+    if (message)
+        alert(message);
+
+
+    $("input:checkbox").prop("checked", true);
+
+    $("input:checkbox").click(function () {
+        //alert($(this).attr('class'));
+        var isChecked = $(this).is(":checked");
+        //down
+        $(this).closest('tr').next().find("input:checkbox").prop("checked", isChecked);
+
+
+        ////up
+        $(this).closest('tr').prev("td").find("input:checkbox").prop("checked", function () {
+            return $(this).closest('tr').next("td").find(":checked").length;
+        });
+
+    });
+
+    $(function () {
+        $('.expand').toggle();      // Default - hide the table row of Course information
+        //$('.collapse').hide();
+        $('.collapse').show();
+        //and also hide the Collapse text from
+        //Student information's action column
+
+        $('.expand-btn, .collapse-btn').on("click", function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.expand, .collapse').toggle();    // toggle to display either Expand or
+            // Collapse text in the Student row
+            tr.next().toggle();    // toggle to display table row with Course information
+            //if ($('#iconclass').hasClass('glyphicon glyphicon-collapse-up')) {
+            //    //alert('up');
+            //    //$("#myTabla").removeClass("table table-bordered").addClass("table table-condensed table-striped");
+            //    $("#iconclass").removeClass('glyphicon glyphicon-collapse-up').addClass('glyphicon glyphicon-expand');
+            //}
+            //else {
+            //    //alert('down');
+            //    //$("#myTabla").removeClass("table table-condensed table-striped").addClass("table table-bordered");
+            //    $("#iconclass").removeClass('glyphicon glyphicon-expand').addClass('glyphicon glyphicon-collapse-up');
+
+            //}
+
+        });
+    });
+</script>
+
+
+
+
+

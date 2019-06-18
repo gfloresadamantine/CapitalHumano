@@ -1,0 +1,358 @@
+﻿@model AdministracionRH.Models.EmployeeValidadorModel
+@{
+    ViewBag.Title = "Index";
+}
+@section scripts {
+
+    @*<link href="~/Content/App/EmployeeCss.css" rel="stylesheet" />*@
+    <link href="@Url.Content("~/Content/App/ValidadorCss.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <script src="~/Scripts/jquery.simplePagination.js"></script>
+    <link href="~/Content/simplePagination.css" rel="stylesheet" />
+
+}
+
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var RecordCount = TempData["RecordCount"] ?? 0;
+    var PageCount = TempData["PageCount"] ?? 0;
+    var CurrentPageIndex = TempData["CurrentPageIndex"];
+    var pageSize = Model.PageSize;
+
+
+
+}
+
+
+<script type="text/javascript">
+    var message = '@message';
+    if (message)
+        alert(message);
+
+
+    function SubmitEmpleado(id) {
+      //  alert(id);
+        $("#SelectedEmployeeId").val(id);
+        $("form").submit();
+        return false;
+    }
+
+
+    function SubmitForm(value) {
+        $("#ClickOnButton").val("DescargarReporte");
+        $("form").submit();
+        return false;
+    }
+
+
+    $(function () {
+    var RecordCount = '@PageCount'
+    var CurrentPageIndex = '@CurrentPageIndex'
+        var pageSize = '@pageSize'
+
+
+
+
+        $("#span_recordcount").hide();
+
+        $('#selector').pagination({
+            items: RecordCount,
+            Pages: pageSize,
+            currentPage: CurrentPageIndex,
+            cssStyle: 'compact-theme',
+            //      edges: 2,
+            prevText: 'Anterior',
+            nextText: 'Siguiente',
+            onPageClick: function (pageNumber) {
+                $("#CurrentPageIndex").val(pageNumber);
+                $("form").submit();
+            }
+        });
+
+        var dtfechaInicial = $('#dtfechaInicial'); //our date input has the name "date"
+    var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaInicial.datepicker({
+        format: 'dd/mm/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    })
+
+
+        var dtfechaFinal = $('#dtfechafinal'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaFinal.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+       
+
+
+    });
+
+</script>
+
+
+
+<div class="container">
+    <h3>Empleados validador</h3>
+
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body" style="font-size:10px;">
+                @using (Html.BeginForm("Index", "ValidadorDatos", FormMethod.Post, new { @class = "form-inline", role = "form" }))
+                {
+                    @Html.Hidden("EmployeeIdConected", Model.EmployeeIdConected)
+                    @Html.Hidden("Rol", Model.Rol)
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.Nombre)*@
+                        @Html.TextBoxFor(model => model.NoEmpleado, new { size = "20", @class = "form-control", @placeholder = "No. Empleado", style = "font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.Nombre, new { size = "20", @class = "form-control", @placeholder = "Nombre", style = "font-size:12px;" })
+                    </div>
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.Rfc, new { size = "20", @class = "form-control", @placeholder = "Rfc", style = "font-size:12px;" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.Nss, new { size = "20", @class = "form-control", @placeholder = "Nss", style = "font-size:12px;" })
+                    </div>
+
+                    <button id="verticalButton" type="submit" class="btn btn-primary button" style="font-size:11px;">Filtrar</button>
+                }
+            </div>
+        </div>
+
+        @if (Model.LstEmployeesValidadorPaged != null)
+        {
+            if (Model.LstEmployeesValidadorPaged.Count() > 0)
+            {
+                <br />
+                <div id="divDetalle" class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Resumen empleados</strong><span class="pull-right clickable" data-effect="hide"><i class="fa fa-times"></i></span>
+                        @if(Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
+                        {
+                          <div style="float:right">
+                            <span class="glyphicon glyphicon-download" style="color:red; font-size:11px;"></span>
+                            @Html.ActionLink("Exportar a excel", "Index", "ValidadorDatos", null, new { onclick = "return SubmitForm();", style = "font-size:13px;" })
+                        </div>
+
+                        }
+                       
+                    </div>
+                    <div class="panel-body" style="font-size:10px;">
+                        <div id="tableWrapper" class="table-responsive">
+                            @using (Html.BeginForm("Index", "ValidadorDatos", FormMethod.Post, new { @class = "form-inline", role = "form", id = "myForm" }))
+                            {
+
+                                @Html.Hidden("SortField", Model.SortField)
+                                @Html.Hidden("SortDirection", Model.SortDirection)
+                                @Html.Hidden("PageCount", Model.PageCount)
+                                @Html.Hidden("PageSize", Model.PageSize)
+                                @Html.Hidden("CurrentPageIndex", Model.CurrentPageIndex)
+                                @Html.Hidden("EmployeeIdConected", Model.EmployeeIdConected)
+                                @Html.Hidden("Rol", Model.Rol)
+                                @Html.Hidden("FingerPrint", Model.NoEmpleado)
+                                @Html.Hidden("FingerPrint", Model.Nombre)
+                                @Html.Hidden("FingerPrint", Model.Rfc)
+                                @Html.Hidden("FingerPrint", Model.Nss)
+                                @Html.Hidden("ClickOnButton", Model.ClickOnButton)
+
+
+                                if (Model.LstEmployeesValidador != null)
+                                {
+                                    for (var i = 0; i < Model.LstEmployeesValidador.Count(); i++)
+                                    {
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CardNumber)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].FirstName)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].LastName)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].MiddleName)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].FullName)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Rfc)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Curp)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].NSS)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].BirthDay)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].StreetName)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].NumberExt)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].NumberInt)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Delegation)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Colony)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CP)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].PhoneNumber)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CellPhoneNumber)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].PersonalEmail)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].PayRollId)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CompanyId)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Banco)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Clabe)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].EdoCivil)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].LugarNacimiento)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CreditoInfonavit)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].EstadoEmpleado)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].CertificatePath)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Sexo)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].TRAMITE_INF_SN)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Etapa)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Estudios)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Nivel_Estudios)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Universidad)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Id_Jefe)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Nombre_jefe)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Ultimo_GradoEstudios)
+                                        @Html.HiddenFor(modelItem => Model.LstEmployeesValidador[i].Estatus)
+
+                                    }
+                                }
+
+
+                                if (Model.LstEmployeesValidadorPaged.Count() > 0)
+                                {
+                                    <span style="font-size:11px;"><strong> @RecordCount Registros Encontrados</strong></span>
+                                }
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead class="thead">
+                                        <tr>
+                                            @*@if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.DireccionGeneral)
+                                                {
+                                                    <th></th>
+                                                }*@
+                                            <th></th>
+                                            @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
+                                            {
+                                                <th style="white-space:nowrap" class="text-center">Estatus <br />(Activo / Inactivo)</th>
+                                            }
+
+                                            <th style="white-space:nowrap" class="text-center">ID Adamantine</th>
+                                            <th style="white-space:nowrap" class="text-center">Nombre</th>
+                                            <th style="white-space:nowrap" class="text-center">Apellido Paterno</th>
+                                            <th style="white-space:nowrap" class="text-center">Apellido Materno</th>
+                                            <th style="white-space:nowrap" class="text-center">Apellido Paterno, Materno, Nombre(s)</th>
+                                            <th style="white-space:nowrap" class="text-center">RFC: <br />Alfabético, Numérico, Homoclave</th>
+                                            <th style="white-space:nowrap" class="text-center">Curp</th>
+                                            <th style="white-space:nowrap" class="text-center">No. Seguro Social</th>
+                                            <th style="white-space:nowrap" class="text-center">Estado Civil</th>
+                                            <th style="white-space:nowrap" class="text-center">Sexo</th>
+                                            <th style="white-space:nowrap" class="text-center">Fecha Nacimiento <br /> (Día/Mes/Año)</th>
+                                            <th style="white-space:nowrap" class="text-center">Calle</th>
+                                            <th style="white-space:nowrap" class="text-center">No. Exterior</th>
+                                            <th style="white-space:nowrap" class="text-center">No. Interior</th>
+                                            <th style="white-space:nowrap" class="text-center">Colonia</th>
+                                            <th style="white-space:nowrap" class="text-center">Delegacion o Municipio</th>
+                                            <th style="white-space:nowrap" class="text-center">Estado</th>
+                                            <th style="white-space:nowrap" class="text-center">Código Postal</th>
+                                            <th style="white-space:nowrap" class="text-center">Teléfono <br />(particular)</th>
+                                            <th style="white-space:nowrap" class="text-center">Teléfono <br />Móvil</th>
+                                            <th style="white-space:nowrap" class="text-center">Correo Electrónico <br />(personal)</th>
+                                            <th style="white-space:nowrap" class="text-center">Lugar de Nacimiento</th>
+                                            <th style="white-space:nowrap" class="text-center">Clabe Interbancaria</th>
+                                            <th style="white-space:nowrap" class="text-center">Banco</th>
+                                            <th style="white-space:nowrap" class="text-center">Contrato Infonavit</th>
+                                            <th style="white-space:nowrap" class="text-center">Trámite Infonavit (Sí-No)</th>
+                                            <th style="white-space:nowrap" class="text-center">Etapa</th>
+                                            <th style="white-space:nowrap" class="text-center">Estudios <br />(Nombre de la Carrera o Bachillerato) </th>
+                                            <th style="white-space:nowrap" class="text-center">Nivel <br />(Trunco, Pasante, Titulado, Posgrado)</th>
+                                            <th style="white-space:nowrap" class="text-center">Universidad</th>
+                                            <th style="white-space:nowrap" class="text-center">Último Nivel de estudios</th>
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.LstEmployeesValidadorPaged)
+                                        {
+
+                                            <tr>
+
+                                                @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.Empleado)
+                                                {
+                                                    <td>
+                                                        <span class="glyphicon glyphicon-edit"></span>
+                                                        @Html.ActionLink("Editar", "Editar", "ValidadorDatos", new
+                                                        {
+                                                            @class = "glyphicon glyphicon-edit",
+                                                            @NoEmpleado = item.CardNumber
+                                                        }, null)
+                                                    </td>
+                                                }
+                                                @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
+                                                {
+                                                    <td class="text-center"> @((bool)item.Estatus ? "A" : "I") </td>
+                                                }
+
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.CardNumber) </td>
+                                                <td class="text-left">@Html.DisplayFor(modelItem => item.FirstName) </td>
+                                                <td class="text-left">@Html.DisplayFor(modelItem => item.LastName) </td>
+                                                <td class="text-left">@Html.DisplayFor(modelItem => item.MiddleName) </td>
+
+                                                <td style="white-space:nowrap">@item.FullName</td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.Rfc) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.Curp) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.NSS) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.EdoCivil) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.Sexo) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.BirthDay) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.StreetName) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.NumberExt) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.NumberInt) </td>
+
+                                                <td>@Html.DisplayFor(modelItem => item.Colony) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Delegation) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.EstadoEmpleado) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.CP) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.PhoneNumber) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.CellPhoneNumber) </td>
+                                                <td class="text-left">@Html.DisplayFor(modelItem => item.PersonalEmail) </td>
+                                                <td class="text-left">@Html.DisplayFor(modelItem => item.LugarNacimiento) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Clabe) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Banco) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.CreditoInfonavit) </td>
+                                                <td class="text-center">@Html.DisplayFor(modelItem => item.TRAMITE_INF_SN) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Etapa) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Estudios) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Nivel_Estudios) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Universidad) </td>
+                                                <td>@Html.DisplayFor(modelItem => item.Ultimo_GradoEstudios) </td>
+
+
+
+
+
+
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                            }
+
+
+                            <div id="selector"></div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if (Model.LstEmployeesValidadorPaged.Count() == 0)
+            {
+                <span id="span_recordcount" style="font-size:11px;"><strong> @Model.LstEmployeesValidadorPaged.Count() Registros Encontrados</strong></span>
+            }
+
+        }
+    </div>
+
+
+</div>
+

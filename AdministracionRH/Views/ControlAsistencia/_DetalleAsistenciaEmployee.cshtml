@@ -1,0 +1,84 @@
+﻿@model AdministracionRH.Models.ControlAsistenciaSearch
+
+<div class="container">
+
+    @if (Model.ListaEmpleado_Asistenica != null)
+    {
+        if (Model.ListaEmpleado_Asistenica.Count > 0)
+        {
+
+
+            <table id="myTabla" class="table table-condensed table-bordered table-striped" style="font-size:11px">
+                <tr>
+                    <th rowspan="2" style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">Jefe Directo</th>
+                    <th rowspan="2" style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">Empleado</th>
+                    @foreach (var TitleFecha in Model.ListaRangoFechas)
+                    {
+
+                        <th style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">Entrada</th>
+                        <th style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">Salida</th>
+                        <th style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">Horas Laboradas</th>
+                    }
+
+                </tr>
+                <tr>
+                    @foreach (var TitleFecha in Model.ListaRangoFechas)
+                    {
+                        var fechatitle = TitleFecha.ToString("dd/MM//yyyy");
+
+                        <th colspan="3" style="text-align:center;vertical-align: middle;background:#0E4D92; color:whitesmoke">
+                            @fechatitle
+                        </th>
+
+                    }
+
+                    <th style="text-align:center;vertical-align:middle;background:#0E4D92; color:whitesmoke">Horas acumuladas</th>
+                    <th style="text-align:center;vertical-align:middle;background:#0E4D92; color:whitesmoke">Total Retardos</th>
+                    <th style="text-align:center;vertical-align:middle;background:#0E4D92; color:whitesmoke">Total Faltas</th>
+                </tr>
+
+                <tbody>
+
+                    @foreach (var empleado in Model.ListaEmpleado_Asistenica.Where(g => g.Children.Count > 0).OrderBy(i => i.Area).ThenBy(a => a.Level))
+                    {
+                        <tr>
+                            <td rowspan="@(empleado.Children.Count()+1)" style="text-align: left; vertical-align: middle; white-space:nowrap;">@empleado.Nombre <br /><b><span style="font-size:9px;color:navy;">@empleado.Area</span></b></td>
+
+
+                            @foreach (var sub in empleado.Children)
+                            {
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; white-space:nowrap">@sub.Nombre</td>
+
+                                @foreach (var fechaReporte in Model.ListaRangoFechas)
+                                {
+                                    var match = sub.LstDetalleAsistencia.Where(f => f.Fecha == fechaReporte).FirstOrDefault();
+
+
+                                    <td style="text-align:center; vertical-align: middle;">@(match != null ? match.Entrada : string.Empty) </td>
+                                    <td style="text-align:center; vertical-align: middle;">@(match != null ? match.Salida : string.Empty) </td>
+                                    <td style="text-align:center; vertical-align: middle;font-size:12px; color:navy"><b>@(match != null ? match.HorasLaboradas : string.Empty)</b> </td>
+                                }
+                                <td style="text-align:center;vertical-align:middle;font-size:12px;">@empleado.HorasAcumuladas</td>
+                                <td style="text-align:center;vertical-align:middle;font-size:12px;">@empleado.TotalRetardos</td>
+                                <td style="text-align:center;vertical-align:middle;font-size:12px;">@empleado.TotalFaltas</td>
+
+                            </tr>
+                        }
+
+                            </tr>
+
+                        }
+
+
+
+
+                </tbody>
+
+
+            </table>
+        }
+
+    }
+
+</div>

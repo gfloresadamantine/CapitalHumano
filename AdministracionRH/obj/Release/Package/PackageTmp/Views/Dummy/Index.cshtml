@@ -1,0 +1,703 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@section scripts {
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+    <script src="~/Scripts/App/jquery-1.11.0.min.js"></script>
+    <link href="~/Content/App/ScrollTabla.css" rel="stylesheet" />
+    <script src="~/Scripts/App/jquery.CongelarFilaColumna.js"></script>
+
+}
+    <main class="main">
+        <div class="ContenedorTabla">
+            <table id="pruebatabla" class="fht-table">
+                <thead>
+                    <tr>
+                        <th class="celda_encabezado_general" rowspan="3">titulo rows</th>
+                        <th class="celda_encabezado_general" rowspan="3">titulo rows</th>
+                        <th class="celda_encabezado_general" rowspan="3">titulo rows</th>
+                        <th class="celda_encabezado_general" rowspan="3">titulo rows</th>
+                        <th class="celda_encabezado_general" rowspan="3">titulo rows</th>
+                        <th class="celda_encabezado_general" colspan="6">titulo</th>
+                        <th class="celda_encabezado_general" colspan="6">titulo</th>
+                        <th class="celda_encabezado_general" colspan="6">titulo</th>
+                        <th class="celda_encabezado_general" colspan="6">titulo</th>
+                    </tr>
+                    <tr>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                        <th class="celda_encabezado_general" colspan="3">titulo</th>
+                    </tr>
+                    <tr>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                        <th class="celda_encabezado_general">titulo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                        <td>Renglon 1</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                        <td>dato GER</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                    <tr>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                        <td>dato</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+       
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#pruebatabla").CongelarFilaColumna({ lboHoverTr: true });
+            });
+        </script>
+
+
+

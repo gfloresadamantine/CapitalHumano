@@ -1,0 +1,27 @@
+﻿@model IEnumerable<AdministracionRH.Common.Catalogo>
+
+
+<table class="table table-bordered table-condensed table-striped" style="width:auto;font-size:13px">
+    <tr>
+        <th>
+            @ViewBag.Description
+        </th>
+        <th>Editar | Borrar</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.DESCRIPTION
+            </td>
+            <td style="text-align:center">
+                @Html.ActionLink(" ", "Edit", "Catalogos", null, new { title = "Editar", @class = "glyphicon glyphicon-edit", onclick = "GetItemCatalogo(" + item.ID + ");" })
+                <a href="#" onclick="return GetItemCatalogo(' + @item.ID + ')">Edit</a>
+
+                @Html.ActionLink(" ", "Delete", "Catalogos", null, new { title = "Borrar", @class = "glyphicon glyphicon-trash" })
+            </td>
+        </tr>
+    }
+
+</table>

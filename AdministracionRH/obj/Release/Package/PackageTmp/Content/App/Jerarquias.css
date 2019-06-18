@@ -1,0 +1,88 @@
+﻿
+.table-fit {
+    width:900px;
+}
+
+
+/*.wrapper {
+    background: #EFEFEF;
+    box-shadow: 1px 1px 10px #999;
+    margin: auto;
+    text-align: center;
+    position: relative;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 20px !important;
+    width: 800px;
+    padding-top: 5px;
+}
+
+.scrolls {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 80px;
+    white-space: nowrap
+}
+
+.imageDiv img {
+    box-shadow: 1px 1px 10px #999;
+    margin: 2px;
+    max-height: 50px;
+    cursor: pointer;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: top;
+}*/
+
+.horizontal-scroll-wrapper {
+    width: auto;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/*th {
+    background-color: #add8e6;
+    color: blue;
+}*/
+
+.btn-group button {
+    background-color: #4CAF50; /* Green background */
+    border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    padding: 4px 4px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+    background-color: #3e8e41;
+}
+
+.circle {
+    background-color: gray;
+    height: 15px;
+    width: 15px;
+    border-radius: 100%;
+}
+
+/*div {
+    max-width: 40em;
+    max-height: 20em;
+    overflow: scroll;
+    position: relative;
+}*/

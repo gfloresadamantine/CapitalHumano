@@ -1,0 +1,50 @@
+﻿
+@model AdministracionRH.Models.EmployeeSearchModel
+
+@section scripts {
+    <link href="~/Content/App/Jerarquias.css" rel="stylesheet" />
+}
+
+
+    <div class="container">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>Búsqueda</strong></div>
+                <div class="panel-body" style="font-size:10px;">
+                    @using (Html.BeginForm("Index", "Jerarquia2", FormMethod.Post, new { @class = "form-inline", role = "form" }))
+                {
+
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.Nombre)*@
+                        @Html.TextBoxFor(model => model.NombreEmpleado, new { size = "20", @class = "form-control", @placeholder = "Empleado", style = "font-size:12px;" })
+                    </div>
+                    <button id="btnBuscar" type="submit" class="btn btn-primary button" style="font-size:11px;">Filtrar</button>
+            }
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div id="divDetalle" class="panel panel-default" style="align-content:initial">
+            <div class="panel-heading"><strong>Resumen empleados</strong><span class="pull-right clickable" data-effect="hide"><i class="fa fa-times"></i></span></div>
+            <div class="panel-body" style="font-size:10px;">
+                <div class="table-responsive horizontal-scroll-wrapper">
+                    @*@Html.Partial("_TablaDinamica", (List<AdministracionRH.Models.MenuItem>)ViewBag.menusList)*@
+                    @Html.Partial("_TablaDinamica", Model)
+                </div>
+            </div>
+        </div>
+
+        @*<div id="divDetalle1" class="panel panel-default" style="align-content:initial">
+            <div class="panel-heading"><strong>Resumen empleados 2</strong><span class="pull-right clickable" data-effect="hide"><i class="fa fa-times"></i></span></div>
+            <div class="panel-body" style="font-size:11px;">
+                <div class="table-responsive">
+                    @Html.Partial("_TablaDinamica", Model)
+                </div>
+            </div>
+        </div>*@
+
+    </div>
+
+
+

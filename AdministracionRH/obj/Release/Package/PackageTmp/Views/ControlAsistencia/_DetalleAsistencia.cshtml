@@ -1,0 +1,139 @@
+﻿
+
+@model AdministracionRH.Models.ControlAsistenciaSearch
+
+@{
+    var menuList = ViewBag.menusList as List<AdministracionRH.Models.EmpleadoJefe>;
+    @ShowTree(menuList);
+}
+
+
+<div class="container">
+
+    @helper ShowTree(List<AdministracionRH.Models.EmpleadoJefe> menusList)
+        {
+
+            <table id="myTabla" class="table table-condensed table-bordered table-striped" style="font-size:10px">
+                @*table-fit*@
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>NOMBRE</th>
+                    <th>AREA</th>
+                    <th>PUESTO</th>
+                    @foreach (var itemFecha in Model.ListaRangoFechas)
+                    {
+                        <th colspan="2" style="text-align:center">
+                            @itemFecha.ToShortDateString()
+                        </th>
+                    }
+                </tr>
+                @foreach (var item in menusList.OrderBy(i=>i.Level))
+                {
+                    if (Model.ListaEmpleadoAsistencia.Where(i => i.EmployeeId == item.EmployeeId).Count() > 0)
+                    {
+
+                        foreach (var employeeAsistencia in Model.ListaEmpleadoAsistencia.Where(i => i.EmployeeId == item.EmployeeId))
+                        {
+                            <tr>
+
+                                <td>
+                                    @if (employeeAsistencia.Es_Jefe == 1)
+                                    {
+                                        <a href="#" class="expand-btn"><span id="iconclass" class="glyphicon glyphicon-chevron-right"></span></a>
+                                    }
+                                </td>
+                                <td style="text-align:center"> <input type="checkbox" data-val="true" id="@("chk_"+employeeAsistencia.EmployeeId )" class="@("class_"+item.ParentID)" name="IsChecked" value=@employeeAsistencia.boolSelected></td>
+                                <td style="white-space:nowrap;width:50px;">@employeeAsistencia.Nombre </td>
+                                <td style="white-space:nowrap;width:50px;">@employeeAsistencia.Area</td>
+                                <td style="white-space:nowrap;width:50px;">@employeeAsistencia.Puesto</td>
+
+                                @foreach (var asistencia in employeeAsistencia.LstDetalleAsistencia)
+                                {
+                                    <td style="text-align:center">
+                                        @asistencia.Entrada
+                                    </td>
+                                    <td style="text-align:center">
+                                        @asistencia.Salida
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        if (item.Children != null)
+                        {
+                            if (item.Children.Any())
+                            {
+                                <tr class="expand collapse">
+
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="21">
+                                        @ShowTree(item.Children.ToList())
+                                    </td>
+                                </tr>
+
+                            }
+
+                        }
+
+                    }
+
+
+
+                }
+
+            </table>
+}
+
+
+</div>
+
+<script type="text/javascript">
+
+    $("input:checkbox").prop("checked", true);
+
+    $("input:checkbox").click(function () {
+        //alert($(this).attr('class'));
+        var isChecked = $(this).is(":checked");
+        //down
+        $(this).closest('tr').next().find("input:checkbox").prop("checked", isChecked);
+
+
+        ////up
+        $(this).closest('tr').prev("td").find("input:checkbox").prop("checked", function () {
+            return $(this).closest('tr').next("td").find(":checked").length;
+        });
+
+    });
+
+    $(function () {
+        $('.expand').toggle();      // Default - hide the table row of Course information
+        $('.collapse').hide();
+        //and also hide the Collapse text from
+        //Student information's action column
+
+        $('.expand-btn, .collapse-btn').on("click", function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.expand, .collapse').toggle();    // toggle to display either Expand or
+            // Collapse text in the Student row
+            tr.next().toggle();    // toggle to display table row with Course information
+            if ($('#iconclass').hasClass('glyphicon glyphicon-collapse-up')) {
+                //alert('up');
+                //$("#myTabla").removeClass("table table-bordered").addClass("table table-condensed table-striped");
+                $("#iconclass").removeClass('glyphicon glyphicon-collapse-up').addClass('glyphicon glyphicon-expand');
+            }
+            else {
+                //alert('down');
+                //$("#myTabla").removeClass("table table-condensed table-striped").addClass("table table-bordered");
+                $("#iconclass").removeClass('glyphicon glyphicon-expand').addClass('glyphicon glyphicon-collapse-up');
+
+            }
+
+        });
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-scope" content="profile email" />
+    <meta name="google-signin-client_id" content="696443536897-be5duvplodt925ikfnbi6cd80tung8ca.apps.googleusercontent.com" />
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/App/LoginGoogle.js"></script>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @using AdministracionRH.Common
+    <link href="~/Content/App/Layout.css" rel="stylesheet" />
+
+    @section Scripts{
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    }
+
+    @{
+        var Rol = (Enumeraciones.enumRoles)ViewBag.EnumRol;
+
+    }
+</head>
+<body>
+
+    <div id="wrap">
+        <header>
+
+            <nav class="navbar navbar-default" role="navigation">
+
+                <div class="container-fluid">
+                    <!--header section -->
+
+                    <div class="navbar-header">
+                        <div class="navbar-header pull-left">
+                            <img class="img-circle" src="~/images/Adamantine1.png" alt="Sample Image" height="39px;" width="39px;" />
+                        </div>
+
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+
+                        </button>
+
+                        @*<a class="navbar-brand" href="#"><strong>Administración técnica de proyectos</strong></a>*@
+                        <a class="navbar-brand" href="@Url.Action("Index", "Home")"><strong>Capital Humano</strong></a>
+
+
+
+                    </div>
+                    <!-- menu section -->
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>@Html.ActionLink("Inicio", "Index", "Home", new { @class = "elements" }, null)</li>
+
+                            @if (Rol == Enumeraciones.enumRoles.AdministradorSistemas || Rol == Enumeraciones.enumRoles.AdministradorRh)
+                            {
+
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Catálogos<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Areas", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Areas }, null)</li>
+                                        <li>@Html.ActionLink("Patrones", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Patrones }, null)</li>
+                                        <li>@Html.ActionLink("Puestos", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Puestos }, null)</li>
+                                        <li>@Html.ActionLink("Ubicaciones", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Ubicaciones }, null)</li>
+                                        <li>@Html.ActionLink("Compañias", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Compañias }, null)</li>
+                                        <li>@Html.ActionLink("Nacionalidad", "Index", "Catalogos", new { @class = "elements", enumCatalogo = Enumeraciones.enumCatalogos.Nacionalidad }, null)</li>
+                                    </ul>
+                                </li>
+
+
+
+
+                            }
+                            @if (Rol == Enumeraciones.enumRoles.AdministradorSistemas || Rol == Enumeraciones.enumRoles.Empleado || ((string)ViewBag.CardNumber).Contains("31974"))
+
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Validar Empleados<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+
+                                        <li>@Html.ActionLink("Validar datos empleados", "Index", "ValidadorDatos", new { @class = "elements" }, null)</li>
+
+                                    </ul>
+                                </li>
+                            }
+
+
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Consultas<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    @if (Rol == Enumeraciones.enumRoles.AdministradorSistemas)
+                                    {
+                                        <li>@Html.ActionLink("Empleados", "Index", "Employees", new { @class = "elements" }, null)</li>
+                                    }
+
+
+                                    @*@if (Rol == Enumeraciones.enumRoles.AdministradorSistemas || Rol == Enumeraciones.enumRoles.AdministradorRh || Rol == Enumeraciones.enumRoles.DireccionGeneral || Rol == Enumeraciones.enumRoles.DireccionArea || Rol == Enumeraciones.enumRoles.SubDirector || Rol == Enumeraciones.enumRoles.Gerente)
+                                        {*@
+                                    <li>@Html.ActionLink("Reporte asistencias", "Index", "ControlAsistencia", new { @class = "elements" }, null)</li>
+                                    @*}*@
+                                </ul>
+                            </li>
+
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li style="color:whitesmoke; align-content:stretch;">
+                                <div style="font-size:11px;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                                    <table>
+                                        <tr>
+                                            <td rowspan="2"><img class="img-circle" src=@ViewBag.ImageUser alt="Sample Image" height="39px;" width="39px;" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <b>@ViewBag.Nombre</b>
+                                                | <i>@ViewBag.Rol</i>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </li>
+
+                            <li id="li_salir" class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Salir <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a id="lnkSingOut" href="#" onclick="signOut();">Cerrar sessión</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="body" style="background-color:#fcfcf8">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+
+            <div class="content-wrapper">
+                <div id="footer" class="float-left text-center">
+                    <p>Capital Humano | &copy; Adamantine @DateTime.Now.Year</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,439 @@
+﻿@model AdministracionRH.Common.EmployeeValidador
+
+@{
+    ViewBag.Title = "Edit";
+}
+@section scripts {
+
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <link href="~/Content/App/Editar.css" rel="stylesheet" />
+}
+<script type="text/javascript">
+   
+
+    $(function () {
+        var dtfechaInicial = $('#dtBirthDay'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtfechaInicial.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+        var dtAdmissionDate = $('#dtAdmissionDate'); //our date input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        dtAdmissionDate.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+
+        $("#dtBirthDay").change(function () {
+            $("#BirthDay").val($("#dtBirthDay").val());
+        })
+
+        $("#dtAdmissionDate").change(function () {
+            $("#AdmissionDate").val($("#dtAdmissionDate").val());
+        })
+        $(".xyz").click(function () {
+            window.open($(this).attr("name"), '_blank');
+        });
+
+        $('.mayusculas').keyup(function () {
+            $(this).val($(this).val().toUpperCase());
+        });
+
+        function validateNumber(event) {
+            var key = window.event ? event.keyCode : event.which;
+            if (event.keyCode === 8 || event.keyCode === 46) {
+                return true;
+            } else if (key < 48 || key > 57) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+        $('.onlyNumbers').keypress(validateNumber);
+
+    });
+
+</script>
+
+@*<h2>Editar Empleado</h2>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.EmployeeId)
+
+    @Html.HiddenFor(model => model.BirthDay)
+    @Html.HiddenFor(model => model.AdmissionDate)
+    @Html.HiddenFor(model => model.EmployeePositionId)
+
+<div class="row">
+    
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <h3>Edición datos empleado</h3>
+        <form role="form">
+
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-weight: bold;">Datos Personales</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CardNumber, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.CardNumber, new { htmlAttributes = new { @class = "form-control numericOnly input-prepend onlyNumbers", @maxlength = "10", @placeholder = "ID Adamantine" } }) @*, @readonly = "readonly"*@
+                                @Html.ValidationMessageFor(model => model.CardNumber, "", new { @class = "text-danger" })
+                            </div>
+
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FullName, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control numericOnly input-prepend mayusculas", @maxlength = "100", @placeholder = "Apellido Paterno, Materno, Nombre(s)" } }) @*, @readonly = "readonly"*@
+                                @*@Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Sexo, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Sexo, new { htmlAttributes = new { @class = "form-control numericOnly input-prepend  mayusculas", @maxlength = "10", @placeholder = "Sexo" } }) @*, @readonly = "readonly"*@
+                                @*@Html.ValidationMessageFor(model => model.FullName, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Nombre" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Apellido Paterno" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MiddleName, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Apellido Materno" } })
+                                @Html.ValidationMessageFor(model => model.MiddleName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Rfc, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Rfc, new { htmlAttributes = new { @class = "form-control input-prepend   mayusculas", @maxlength = "13", @placeholder = "RFC: Alfabético, Numérico, Homoclave" } })
+                                @Html.ValidationMessageFor(model => model.Rfc, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Curp, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Curp, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @maxlength = "18", @placeholder = "Curp" } })
+                                @Html.ValidationMessageFor(model => model.Curp, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NSS, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.NSS, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @maxlength = "11", @placeholder = "No. Seguro Social" } })
+                                @Html.ValidationMessageFor(model => model.NSS, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LugarNacimiento, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.LugarNacimiento, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Lugar nacimiento" } })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EdoCivil, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.EdoCivil, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Estado civil" } })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BirthDay, htmlAttributes: new { @class = "MyLabel" })
+                                <div class='input-group date' style="width:auto">
+                                    <input type="text" id="dtBirthDay" class="form-control input-prepend" value=@(Model.BirthDay) placeholder="Fecha Nacimiento">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    @Html.ValidationMessageFor(model => model.BirthDay, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TRAMITE_INF_SN, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.TRAMITE_INF_SN, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Trámite Infonavit (Sí-No)" } })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CreditoInfonavit, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.CreditoInfonavit, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Contrato Infonavit" } })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Etapa, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Etapa, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Etapa" } })
+                            </div>
+                        </div>
+                    </div>
+                    @if ((AdministracionRH.Common.Enumeraciones.enumRoles)ViewBag.EnumRol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || (AdministracionRH.Common.Enumeraciones.enumRoles)ViewBag.EnumRol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
+                    {
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                                <div class="form-group">
+
+                                                    @Html.Label("Estatus (Activo/Inactivo)", new { @class = "MyLabel" })
+                                                    @Html.CheckBoxFor(model => model.Estatus, new
+                                    {
+                                        @id = "checkEmployee",
+                                    })
+                                                </div>
+                                            </div>
+
+                                        </div>
+                        }
+
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-weight: bold;">Dirección</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StreetName, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.StreetName, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Calle" } })
+                                @Html.ValidationMessageFor(model => model.StreetName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NumberExt, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.NumberExt, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "No. Exterior" } })
+                                @Html.ValidationMessageFor(model => model.NumberExt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NumberInt, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.NumberInt, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "No. Interior" } })
+                                @Html.ValidationMessageFor(model => model.NumberInt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Delegation, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Delegation, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Delegación" } })
+                                @Html.ValidationMessageFor(model => model.Delegation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Colony, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Colony, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Colonia" } })
+                                @Html.ValidationMessageFor(model => model.Colony, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EstadoEmpleado, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.EstadoEmpleado, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Estado" } })
+                                @Html.ValidationMessageFor(model => model.CP, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CP, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.CP, new { htmlAttributes = new { @class = "form-control input-prepend onlyNumbers", @maxlength = "5", @placeholder = "Código postal" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-weight: bold;">Teléfonos y referencias bancarias</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control input-prepend onlyNumbers", @maxlength = "12", @placeholder = "Teléfono (particular)" } })
+                                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CellPhoneNumber, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.CellPhoneNumber, new { htmlAttributes = new { @class = "form-control input-prepend onlyNumbers", @maxlength = "12", @placeholder = "Teléfono Móvil" } })
+                                @Html.ValidationMessageFor(model => model.CellPhoneNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PersonalEmail, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.PersonalEmail, new { htmlAttributes = new { @class = "form-control input-prepend", @placeholder = "Correo Electrónico (Personal)" } })
+                                @Html.ValidationMessageFor(model => model.PersonalEmail, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Banco, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Banco, new { htmlAttributes = new { @class = "form-control input-prepend   mayusculas", @placeholder = "Banco" } })
+                                @Html.ValidationMessageFor(model => model.Banco, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Clabe, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Clabe, new { htmlAttributes = new { @class = "form-control input-prepend  onlyNumbers", @maxlength = "18", @placeholder = "Clabe Interbancaria" } })
+                                @Html.ValidationMessageFor(model => model.Banco, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-weight: bold;">Nivel de estudios</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Estudios, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Estudios, new { htmlAttributes = new { @class = "form-control input-prepend   mayusculas", @placeholder = "Estudios (Nombre de la carrera o Bachillerato)" } })
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Nivel_Estudios, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Nivel_Estudios, new { htmlAttributes = new { @class = "form-control input-prepend   mayusculas", @placeholder = "Nivel (Trunco, Pasante, Titulado, Posgrado)" } })
+
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Universidad, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Universidad, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Universidad" } })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Ultimo_GradoEstudios, htmlAttributes: new { @class = "MyLabel" })
+                                @Html.EditorFor(model => model.Ultimo_GradoEstudios, new { htmlAttributes = new { @class = "form-control input-prepend  mayusculas", @placeholder = "Último nivel de estudios" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*<h4>Jefes</h4>
+            <hr class="colorgraph">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Id_Jefe, htmlAttributes: new { @class = "MyLabel" })
+                        @Html.EditorFor(model => model.Id_Jefe, new { htmlAttributes = new { @class = "form-control input-prepend", @placeholder = "Estudios" } })
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre_jefe, htmlAttributes: new { @class = "MyLabel" })
+                        @Html.EditorFor(model => model.Nombre_jefe, new { htmlAttributes = new { @class = "form-control input-prepend", @placeholder = "Nivel estudios" } })
+
+                    </div>
+                </div>
+            </div>*@
+
+
+            @*<h4>Documentación</h4>
+            <hr class="colorgraph">*@
+
+            @*<div class="row">
+
+
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="form-group">
+
+                        <ul>
+                            @foreach (var item in Model.LstDocumentos)
+                            {
+                                <li><a href="file://@(Model.CertificatePath+item.NombreDocto)" class="xyz" name=@(Model.CertificatePath+item.NombreDocto) target="_blank">@item.TipoDocto</a></li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>*@
+
+            @*<hr class="colorgraph">*@
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <input type="submit" value="Guardar cambios" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        @Html.ActionLink("Regresar a resumen", "Index")
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+}
+
+

@@ -1,0 +1,99 @@
+﻿@model IEnumerable<AdministracionRH.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="container">
+    <table class="table table-striped table-condensed" style="font-size:12px;">
+        <tr>
+            <th>Action</th>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>email</th>
+            <th>Department</th>
+        </tr>
+        @foreach (var s in Model)
+        {
+
+            <tr>
+                <td>
+                    <a href="#" class="expand-btn"><span id="iconclass" class="glyphicon glyphicon-expand" style="font-size:20px;"></span></a>
+                    @*<a href="#" class="collapse collapse-btn">Collapse</a>*@
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(p => s.Department)
+                </td>
+
+            </tr>
+            <tr id="@s.ID" class="expand collapse">
+                <td></td>
+                <td colspan="5">
+                    <table class="table table-bordered table-hover table-condensed">
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Course Name</th>
+                            <th>Semester</th>
+                        </tr>
+                        @foreach (var course in s.Courses)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(p => course.ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => course.CourseName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(p => course.SemesterName)
+                                </td>
+                            </tr>
+
+                        }
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        }
+    </table>
+
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $('.expand').toggle();      // Default - hide the table row of Course information
+        $('.collapse').hide();
+        //and also hide the Collapse text from
+        //Student information's action column
+
+        $('.expand-btn, .collapse-btn').on("click", function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.expand, .collapse').toggle();    // toggle to display either Expand or
+            // Collapse text in the Student row
+            tr.next().toggle();    // toggle to display table row with Course information
+            if ($('#test').hasClass('glyphicon glyphicon-collapse-up'))
+                $("#iconclass").removeClass('glyphicon glyphicon-collapse-up').addClass('glyphicon glyphicon-expand');
+            else
+                $("#iconclass").removeClass('glyphicon glyphicon-expand').addClass('glyphicon glyphicon-collapse-up');
+        });
+    });
+</script>

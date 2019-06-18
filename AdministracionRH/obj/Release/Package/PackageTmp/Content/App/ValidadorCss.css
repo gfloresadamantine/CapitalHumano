@@ -1,0 +1,29 @@
+﻿.container {
+    width: 100%;
+}
+
+#tableWrapper {
+    width: auto;
+    height: auto;
+    overflow: auto;
+    overflow-y: hidden;
+    margin: 0 auto;
+    white-space: nowrap;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/*table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}*/
+
+th {
+    background-color: #adbce6;
+    color: white;
+    font-size:11px;
+}
