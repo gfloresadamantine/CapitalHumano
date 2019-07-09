@@ -105,10 +105,10 @@
                                     }
 
 
-                                    @*@if (Rol == Enumeraciones.enumRoles.AdministradorSistemas || Rol == Enumeraciones.enumRoles.AdministradorRh || Rol == Enumeraciones.enumRoles.DireccionGeneral || Rol == Enumeraciones.enumRoles.DireccionArea || Rol == Enumeraciones.enumRoles.SubDirector || Rol == Enumeraciones.enumRoles.Gerente)
-                                        {*@
+                                    @if (Rol == Enumeraciones.enumRoles.AdministradorSistemas || Rol == Enumeraciones.enumRoles.AdministradorRh || Rol == Enumeraciones.enumRoles.Empleado)
+                                    {
                                     <li>@Html.ActionLink("Reporte asistencias", "Index", "ControlAsistencia", new { @class = "elements" }, null)</li>
-                                    @*}*@
+                                    }
                                 </ul>
                             </li>
 

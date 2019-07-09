@@ -26,6 +26,7 @@ namespace AdministracionRH.Controllers
             ViewBag.AccessGroup = employee.AreaName;
             ViewBag.Rol = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.PositionName.ToLower());
             ViewBag.EnumRol = employee.Rol;
+            ViewBag.CardNumber = employee.CardNumber;
 
             EmployeeService employeeService = new EmployeeService();
             List<Catalogo> ListaCatalogos = employeeService.GetCatalogos();
@@ -55,6 +56,7 @@ namespace AdministracionRH.Controllers
             ViewBag.AccessGroup = employee.AreaName;
             ViewBag.Rol = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.PositionName.ToLower());
             ViewBag.EnumRol = employee.Rol;
+            ViewBag.CardNumber = employee.CardNumber;
             model.Rol = employee.Rol;
             model.EmployeeIdConnected =Convert.ToInt32(employee.EmployeeId);
 
@@ -87,7 +89,8 @@ namespace AdministracionRH.Controllers
                 {
                         var level = service._model.ListaEmpleado_Asistenica.Where(g => g.Level > 0).Min(i => i.Level);
                         var dataSoure = service._model.ListaEmpleado_Asistenica.Where(i => i.Level == level).OrderBy(o => o.Area).ThenBy(h => h.Nombre).ToList();
-                        if (dataSoure.Count() == 0)
+                    //var dataSoure = service._model.ListaEmpleado_Asistenica.OrderBy(o => o.Area).ThenBy(h => h.Nombre).ToList();
+                    if (dataSoure.Count() == 0)
                             TempData["AlertMessage"] = "No se encontraron registros";
                         ViewBag.menusList = dataSoure;
 

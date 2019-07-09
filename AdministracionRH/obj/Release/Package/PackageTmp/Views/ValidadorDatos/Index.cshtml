@@ -221,11 +221,11 @@
                                 <table class="table table-bordered table-hover table-striped">
                                     <thead class="thead">
                                         <tr>
-                                            @*@if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.DireccionGeneral)
+                                            @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
                                                 {
                                                     <th></th>
-                                                }*@
-                                            <th></th>
+                                                }
+                                            @*<th></th>*@
                                             @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || ((string)ViewBag.CardNumber).Contains("31974"))
                                             {
                                                 <th style="white-space:nowrap" class="text-center">Estatus <br />(Activo / Inactivo)</th>
@@ -274,7 +274,7 @@
 
                                             <tr>
 
-                                                @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.Empleado)
+                                                @if (Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorRh || Model.Rol == AdministracionRH.Common.Enumeraciones.enumRoles.AdministradorSistemas ||  ((string)ViewBag.CardNumber).Contains("31974"))
                                                 {
                                                     <td>
                                                         <span class="glyphicon glyphicon-edit"></span>
@@ -323,12 +323,6 @@
                                                 <td>@Html.DisplayFor(modelItem => item.Nivel_Estudios) </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Universidad) </td>
                                                 <td>@Html.DisplayFor(modelItem => item.Ultimo_GradoEstudios) </td>
-
-
-
-
-
-
 
                                             </tr>
                                         }

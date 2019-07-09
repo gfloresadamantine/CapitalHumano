@@ -276,7 +276,7 @@ namespace AdministracionRH.Services
                     worksheet.Cell("V" + index.ToString()).Value = emp.LugarNacimiento;
                     worksheet.Cell("V" + index.ToString()).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-                    worksheet.Cell("W" + index.ToString()).Value = string.Format("{0}{1}", "'", emp.Clabe.ToString());
+                    worksheet.Cell("W" + index.ToString()).Value = string.Format("{0}{1}", "'", emp.Clabe ==null? string.Empty: emp.Clabe.ToString());
                     worksheet.Cell("W" + index.ToString()).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     worksheet.Cell("X"+index.ToString()).Value = emp.Banco;
                     worksheet.Cell("X" + index.ToString()).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
